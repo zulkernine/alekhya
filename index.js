@@ -150,14 +150,26 @@ app.use((err, req, res, next) => {
     res.status(500).render("500.ejs");
 });
 
-
-app.listen(port, () => {
-    console.log("Listening to port: " + port);
-});
-
 function checkAuthenticated(req, res, next) {
     console.log("authntication check " + req.session.isAuthenticated);
     if (req.session.isAuthenticated) {
         return next();
     } else res.redirect("/login");
 }
+
+
+
+const serverless = require("serverless-http");
+// app.listen(port, () => {
+//     console.log("Listening to port: " + port);
+// });
+
+if (process.env.ENVIRONMENT === "production") {
+    exports.handler = serverless(app);
+} else {
+    app.listen(port, () => {
+        console.log(`Server is listening on port ${port}.`);
+    });
+}
+
+// exports.handler = serverless(app);

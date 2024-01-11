@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { dynamodb } = require("../service/aws-service");
 const config = require("../config.json");
 
@@ -32,6 +32,7 @@ router.post("/", (req, res) => {
         if (err || !data) {
             res.render("login.ejs", { error: "Username not found" });
         } else {
+
             if (bcrypt.compareSync(req.body.password, data.password)) {
                 console.log("Success");
                 req.session.isAuthenticated = true;
